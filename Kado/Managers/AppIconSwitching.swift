@@ -1,7 +1,6 @@
 import UIKit
 
 /// The system's alternate-icon API, behind a seam so the picker and the
-/// Supporter pack reconciliation can be driven without a Home Screen.
 @MainActor
 protocol AppIconSwitching {
     /// `false` on the rare device that can't change icons; the picker

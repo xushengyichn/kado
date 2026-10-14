@@ -26,7 +26,7 @@ struct LocalizationCoverageTests {
         "",
     ]
 
-    private static let supportedLanguages: [String] = ["fr"]
+    private static let supportedLanguages: [String] = ["fr", "zh-Hans"]
 
     private static let catalogPaths: [String] = [
         "Kado/Resources/Localizable.xcstrings",
@@ -41,6 +41,39 @@ struct LocalizationCoverageTests {
     }
 
     // MARK: - Helpers
+
+    @Test("Chinese translations preserve interpolation argument types and positions")
+    func chineseFormatArguments() throws {
+        let pattern = try NSRegularExpression(pattern: #"(?<!%)%(?:([1-9][0-9]*)\$)?(lld|@|ld|d|f)"#)
+        func arguments(_ text: String) -> [String] {
+            let source = text as NSString
+            return pattern.matches(in: text, range: NSRange(location: 0, length: source.length))
+                .enumerated().map { offset, match in
+                    let position = match.range(at: 1).location == NSNotFound
+                        ? String(offset + 1) : source.substring(with: match.range(at: 1))
+                    return position + ":" + source.substring(with: match.range(at: 2))
+                }.sorted()
+        }
+        for path in Self.catalogPaths {
+            let data = try loadCatalogData(relativePath: path)
+            let json = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+            let strings = try #require(json["strings"] as? [String: [String: Any]])
+            for (key, entry) in strings where !Self.keysExempt.contains(key) {
+                let localizations = try #require(entry["localizations"] as? [String: [String: Any]])
+                let chinese = try #require(localizations["zh-Hans"])
+                let value: String
+                if let unit = chinese["stringUnit"] as? [String: Any] {
+                    value = try #require(unit["value"] as? String)
+                } else {
+                    let variations = try #require(chinese["variations"] as? [String: Any])
+                    let plural = try #require(variations["plural"] as? [String: [String: Any]])
+                    let unit = try #require(plural["other"]?["stringUnit"] as? [String: Any])
+                    value = try #require(unit["value"] as? String)
+                }
+                #expect(arguments(key) == arguments(value), "Invalid Chinese format for \(key)")
+            }
+        }
+    }
 
     private func verifyCoverage(catalogRelativePath path: String) throws {
         let data = try loadCatalogData(relativePath: path)

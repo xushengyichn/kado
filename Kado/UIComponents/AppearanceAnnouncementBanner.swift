@@ -2,7 +2,6 @@ import SwiftUI
 import KadoCore
 
 /// A card at the bottom of Today announcing Settings › Appearance: the
-/// habit colour themes, and the alternate icons the Supporter pack adds.
 ///
 /// Due from the first launch, so everyone who updates sees it once.
 /// `AppearanceAnnouncing` owns whether it is due, and `TodayCard` keeps
@@ -18,7 +17,7 @@ struct AppearanceAnnouncementBanner: View {
     var body: some View {
         TodayNoticeCard(
             systemImage: "paintpalette",
-            message: "Make Kadō yours: Settings › Appearance has colour themes for your habits and, with the Supporter pack, alternate app icons.",
+            message: "Make Kadō yours: Settings › Appearance has colour themes for your habits and alternate app icons.",
             primaryTitle: "Open Appearance",
             primaryIdentifier: AccessibilityID.Today.appearanceAnnouncementOpenButton,
             onPrimary: onOpen,

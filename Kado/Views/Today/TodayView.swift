@@ -26,7 +26,6 @@ struct TodayView: View {
     @Environment(\.streakCalculator) private var streakCalculator
     @Environment(\.habitScoreCalculator) private var scoreCalculator
     @Environment(\.reviewPromptService) private var reviewPromptService
-    @Environment(\.tipNudge) private var tipNudge
     @Environment(\.appearanceAnnouncement) private var appearanceAnnouncement
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.calendar) private var calendar
@@ -56,7 +55,7 @@ struct TodayView: View {
     @State private var quickLog: QuickLogEvent?
 
     /// The card in the slot at the bottom of the list, if any — the
-    /// Appearance announcement or the tip nudge, never both
+
     /// (`TodayCard`). Seeded in `.onAppear` rather than in the
     /// property's initial value, because `@State` is set up before the
     /// environment is injected and would capture the `@Entry` defaults
@@ -72,13 +71,6 @@ struct TodayView: View {
         case editHabit(UUID)
         case logCounter(UUID)
         case logTimer(UUID)
-        /// The Tip Jar, reached from the nudge at the bottom of the
-        /// list. A sheet rather than a `navigationDestination`, so the
-        /// detour doesn't leave the Tip Jar sitting on Today's
-        /// navigation stack once it's done.
-        case tipJar
-        /// Settings › Appearance, reached from the announcement card.
-        /// A sheet for the same reason as the Tip Jar.
         case appearance
 
         var id: String {
@@ -87,7 +79,6 @@ struct TodayView: View {
             case .editHabit(let habitID): "edit-\(habitID)"
             case .logCounter(let habitID): "counter-\(habitID)"
             case .logTimer(let habitID): "timer-\(habitID)"
-            case .tipJar: "tip-jar"
             case .appearance: "appearance"
             }
         }
@@ -236,11 +227,6 @@ struct TodayView: View {
             } else {
                 HabitUnavailableView()
             }
-        case .tipJar:
-            NavigationStack {
-                TipJarView()
-                    .toolbar { closeButton }
-            }
         case .appearance:
             NavigationStack {
                 AppearanceView()
@@ -316,14 +302,6 @@ struct TodayView: View {
                         AppearanceAnnouncementBanner(
                             onOpen: { sheet = .appearance },
                             onHide: hideAppearanceAnnouncement
-                        )
-                        .todayNoticeCardRow()
-                    }
-                case .tipNudge:
-                    Section {
-                        TipNudgeBanner(
-                            onTip: { sheet = .tipJar },
-                            onHide: hideTipNudge
                         )
                         .todayNoticeCardRow()
                     }
@@ -589,26 +567,11 @@ struct TodayView: View {
 
     // MARK: - Bottom card
 
-    /// Asks both services what is due and lets `TodayCard` pick. Every
-    /// rule either service applies is one-way, so a dismissed card
-    /// never comes back.
+    /// Show the optional appearance announcement until it is dismissed.
     private func refreshCard() {
-        card = TodayCard.resolve(
-            announcementRetiredAt: appearanceAnnouncement.retiredAt(),
-            tipNudgeDue: tipNudge.shouldShow(),
-            now: .now,
-            calendar: calendar
-        )
+        card = TodayCard.resolve(announcementRetiredAt: appearanceAnnouncement.retiredAt())
     }
 
-    private func hideTipNudge() {
-        tipNudge.hide()
-        withAnimation(reduceMotion ? nil : KadoMotion.base) {
-            card = nil
-        }
-    }
-
-    /// Takes the card away rather than re-resolving: the tip nudge
     /// isn't due until tomorrow anyway, and resolving would only say so.
     private func hideAppearanceAnnouncement() {
         appearanceAnnouncement.retire()
@@ -643,21 +606,18 @@ struct TodayView: View {
     TodayView()
         .modelContainer(PreviewContainer.shared)
         .environment(\.appearanceAnnouncement, StubAppearanceAnnouncementService())
-        .environment(\.tipNudge, StubTipNudgeService())
 }
 
 #Preview("Tip nudge") {
     TodayView()
         .modelContainer(PreviewContainer.shared)
         .environment(\.appearanceAnnouncement, StubAppearanceAnnouncementService(retiredAt: .distantPast))
-        .environment(\.tipNudge, StubTipNudgeService())
 }
 
 #Preview("Tip nudge — Dark") {
     TodayView()
         .modelContainer(PreviewContainer.shared)
         .environment(\.appearanceAnnouncement, StubAppearanceAnnouncementService(retiredAt: .distantPast))
-        .environment(\.tipNudge, StubTipNudgeService())
         .preferredColorScheme(.dark)
 }
 

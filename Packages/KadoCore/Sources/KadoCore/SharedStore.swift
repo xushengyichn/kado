@@ -15,6 +15,12 @@ import SwiftData
 /// an isolation warning (same rule as
 /// `DevModeController.defaultProductionContainer`).
 nonisolated public enum SharedStore {
+    /// Local Personal Team builds cannot use CloudKit entitlements.
+    public static var offlineOnly: Bool {
+        let value = Bundle.main.object(forInfoDictionaryKey: "KadoOfflineOnly")
+        return (value as? Bool) == true || (value as? String) == "YES"
+    }
+
     /// App Group identifier. Must match the entitlement string on
     /// both the main app and the widget extension targets.
     public static let appGroupID = "group.dev.scastiel.kado"
@@ -94,20 +100,24 @@ nonisolated public enum SharedStore {
     /// SQLite read-only traps at the first fetch because the
     /// on-disk metadata references a container the process can't
     /// reach.
-    public static func productionContainer() throws -> ModelContainer {
+    public static func productionContainer(storeURL: URL? = nil) throws -> ModelContainer {
         let schema = Schema(versionedSchema: KadoSchemaV4.self)
+        let cloudDatabase: ModelConfiguration.CloudKitDatabase = offlineOnly
+            ? .none : .private(CloudContainerID.kado)
         let configuration: ModelConfiguration
-        if let target = productionStoreURL() {
-            migrateLegacyStoreIfNeeded(from: legacyStoreURL(), to: target)
+        if let target = storeURL ?? productionStoreURL() {
+            if storeURL == nil {
+                migrateLegacyStoreIfNeeded(from: legacyStoreURL(), to: target)
+            }
             configuration = ModelConfiguration(
                 schema: schema,
                 url: target,
-                cloudKitDatabase: .private(CloudContainerID.kado)
+                cloudKitDatabase: cloudDatabase
             )
         } else {
             configuration = ModelConfiguration(
                 schema: schema,
-                cloudKitDatabase: .private(CloudContainerID.kado)
+                cloudKitDatabase: cloudDatabase
             )
         }
         return try ModelContainer(

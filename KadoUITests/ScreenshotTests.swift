@@ -101,7 +101,6 @@ final class ScreenshotTests: KadoUITestCase {
             language: Self.runLanguage,
             locale: Self.runLocale,
             seedForScreenshots: true,
-            supporter: true,
             iCloudAvailable: true
         )
         waitForTodayRows(in: supporter)

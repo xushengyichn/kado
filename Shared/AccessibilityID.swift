@@ -78,11 +78,6 @@ enum AccessibilityID {
         /// which SwiftUI does not reliably surface for a `Label`.
         static let newHabitButton = "today.newHabit"
 
-        /// The tip nudge's two actions. Both sit on leaf buttons inside
-        /// `TipNudgeBanner` rather than on the card, which would stamp
-        /// the copy and both buttons with one identifier.
-        static let tipNudgeTipButton = "today.tipNudge.tip"
-        static let tipNudgeHideButton = "today.tipNudge.hide"
         /// The Appearance announcement's two actions, on leaves for the
         /// same reason.
         static let appearanceAnnouncementOpenButton = "today.appearanceAnnouncement.open"
@@ -267,17 +262,6 @@ enum AccessibilityID {
         /// `NavigationLink` in a `Form` is one element already, so this
         /// lands on a leaf.
         static let archivedRow = "settings.archived"
-        /// The row that pushes the Supporter pack screen.
-        static let supporterPackRow = "settings.supporterPack"
-    }
-
-    /// The Supporter pack screen (`SupporterPackView`).
-    enum SupporterPack {
-        static let buyButton = "supporterPack.buy"
-        static let restoreButton = "supporterPack.restore"
-        /// The thank-you that replaces the buy button once the pack is
-        /// owned — what a test waits for after a purchase or restore.
-        static let ownedBadge = "supporterPack.owned"
     }
 
     /// The Archived habits list (`ArchivedHabitsView`).

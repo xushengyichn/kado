@@ -5,11 +5,8 @@ import Foundation
 /// `branding/app-icons/` by `Scripts/render-app-icons.sh`.
 ///
 /// Raw values are stored in `UserDefaults` (``AppIconDefaults``), so
-/// they stay stable strings. What is stored is the user's *pick*; what
-/// the Home Screen should show is `AppIcon.effective(preferred:isSupporter:)`,
-/// since every icon but the default needs the Supporter pack.
+/// they stay stable strings. The stored choice is the icon the app applies.
 nonisolated public enum AppIcon: String, CaseIterable, Codable, Sendable, Hashable {
-    /// Sage on paper. The default, and the only free one.
     case kado
     /// The default's colours swapped: paper on sage.
     case ura
@@ -62,15 +59,4 @@ nonisolated public enum AppIcon: String, CaseIterable, Codable, Sendable, Hashab
     public var previewImageName: String {
         "AppIconPreview\(assetSuffix)"
     }
-}
-
-// MARK: - Supporter pack
-
-/// Kadō's own icon is free; every alternate needs the Supporter pack.
-/// Without it a paid pick shows the default — the stored choice is
-/// kept, so it comes back the moment the pack does.
-extension AppIcon: SupporterGated {
-    public var requiresSupporterPack: Bool { self != .kado }
-
-    public static let freeFallback = AppIcon.kado
 }

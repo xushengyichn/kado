@@ -67,10 +67,8 @@ class KadoUITestCase: XCTestCase {
         suppressNameAutoFocus: Bool = false,
         widgetGallery: Bool = false,
         archiveFirstHabit: Bool = false,
-        supporter: Bool = false,
         habitTheme: String? = nil,
         appearanceAnnouncement: Bool = false,
-        tipNudgeReady: Bool = false,
         iCloudAvailable: Bool = false
     ) -> XCUIApplication {
         let app = XCUIApplication()
@@ -94,15 +92,11 @@ class KadoUITestCase: XCTestCase {
         if archiveFirstHabit {
             app.launchArguments.append("-uiTestArchiveFirstHabit")
         }
-        if supporter {
-            app.launchArguments.append("-uiTestSupporter")
-        }
+
         if appearanceAnnouncement {
             app.launchArguments.append("-uiTestAppearanceAnnouncement")
         }
-        if tipNudgeReady {
-            app.launchArguments.append("-uiTestTipNudgeReady")
-        }
+
         if iCloudAvailable {
             app.launchArguments.append("-uiTestICloudAvailable")
         }

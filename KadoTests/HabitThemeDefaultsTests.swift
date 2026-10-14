@@ -34,7 +34,6 @@ struct HabitThemeDefaultsTests {
         }
     }
 
-    /// A later build adds paid themes (#113); downgrading, or a theme
     /// that is later withdrawn, must not leave habits unpaintable.
     @Test("A raw value outside the cases falls back to Kadō")
     func unknownRawValueFallsBack() {
@@ -47,27 +46,12 @@ struct HabitThemeDefaultsTests {
         #expect(HabitThemeDefaults.theme(in: suite) == .kado)
     }
 
-    /// What the widgets paint in. A refund flips the App Group mirror,
-    /// and the next timeline must fall back to Kadō — while the stored
-    /// pick survives, so the pack coming back restores it.
-    @Test("The widgets' theme is the stored pick, gated on the pack mirror")
-    func renderedThemeIsGated() {
+    @Test("Every selected palette is used without a purchase", arguments: HabitTheme.allCases)
+    func renderedThemeIsTheStoredPick(theme: HabitTheme) {
         let (suite, name) = makeSuite()
-        let (supporter, supporterName) = makeSuite()
-        defer { tearDown(name); tearDown(supporterName) }
-
-        HabitThemeDefaults.setTheme(.autumn, in: suite)
-        #expect(HabitThemeDefaults.renderedTheme(in: suite, supporterDefaults: supporter) == .kado)
-
-        SupporterDefaults.setSupporter(true, in: supporter)
-        #expect(HabitThemeDefaults.renderedTheme(in: suite, supporterDefaults: supporter) == .autumn)
-
-        SupporterDefaults.setSupporter(false, in: supporter)
-        #expect(HabitThemeDefaults.renderedTheme(in: suite, supporterDefaults: supporter) == .kado)
-        #expect(HabitThemeDefaults.theme(in: suite) == .autumn)
-
-        HabitThemeDefaults.setTheme(.classic, in: suite)
-        #expect(HabitThemeDefaults.renderedTheme(in: suite, supporterDefaults: supporter) == .classic)
+        defer { tearDown(name) }
+        HabitThemeDefaults.setTheme(theme, in: suite)
+        #expect(HabitThemeDefaults.renderedTheme(in: suite) == theme)
     }
 
     /// `@AppStorage` in `KadoApp` and the widgets' `theme()` read the

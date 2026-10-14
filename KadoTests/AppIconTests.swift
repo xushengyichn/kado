@@ -4,29 +4,17 @@ import UIKit
 import KadoCore
 @testable import Kado
 
-/// The alternate app icons (#114): which ones the Supporter pack gates,
 /// the names the system is handed, and the artwork the build has to
 /// carry for each. The system switch itself is exercised by hand and in
 /// `AppIconPickerTests`; here it is a `MockAppIconSwitcher`.
 @Suite("App icon")
 @MainActor
 struct AppIconTests {
-    // MARK: - Supporter pack
-
-    @Test("Kadō's own icon is free; every alternate needs the pack")
-    func onlyTheDefaultIsFree() {
-        for icon in AppIcon.allCases {
-            #expect(icon.requiresSupporterPack == (icon != .kado), "\(icon)")
-        }
-        #expect(!AppIcon.freeFallback.requiresSupporterPack)
-    }
-
-    @Test("A paid pick shows the default without the pack, and itself with it")
-    func effectiveIsGated() {
-        for icon in AppIcon.allCases {
-            #expect(AppIcon.effective(preferred: icon, isSupporter: true) == icon)
-            #expect(AppIcon.effective(preferred: icon, isSupporter: false) == .kado)
-        }
+    @Test("Every icon can be applied without a purchase", arguments: AppIcon.allCases)
+    func everyIconIsAvailable(icon: AppIcon) async throws {
+        let switcher = MockAppIconSwitcher()
+        try await AppIconApplier(switcher: switcher).apply(preferred: icon)
+        #expect(switcher.alternateIconName == icon.alternateIconName)
     }
 
     // MARK: - System names
@@ -112,7 +100,7 @@ struct AppIconTests {
     @Test("A supporter's pick reaches the Home Screen")
     func pickIsApplied() async throws {
         let switcher = MockAppIconSwitcher()
-        let changed = try await AppIconApplier(switcher: switcher).apply(preferred: .umi, isSupporter: true)
+        let changed = try await AppIconApplier(switcher: switcher).apply(preferred: .umi)
         #expect(changed)
         #expect(switcher.requests == ["AppIconUmi"])
         #expect(switcher.alternateIconName == "AppIconUmi")
@@ -125,31 +113,10 @@ struct AppIconTests {
         let onUmi = MockAppIconSwitcher(alternateIconName: "AppIconUmi")
         let onDefault = MockAppIconSwitcher()
 
-        #expect(try await !AppIconApplier(switcher: onUmi).apply(preferred: .umi, isSupporter: true))
-        #expect(try await !AppIconApplier(switcher: onDefault).apply(preferred: .kado, isSupporter: false))
+        #expect(try await !AppIconApplier(switcher: onUmi).apply(preferred: .umi))
+        #expect(try await !AppIconApplier(switcher: onDefault).apply(preferred: .kado))
         #expect(onUmi.requests.isEmpty)
         #expect(onDefault.requests.isEmpty)
-    }
-
-    @Test("A refund puts the default icon back")
-    func revokeResetsToDefault() async throws {
-        let switcher = MockAppIconSwitcher(alternateIconName: "AppIconFuji")
-        try await AppIconApplier(switcher: switcher).apply(preferred: .fuji, isSupporter: false)
-        #expect(switcher.requests == [nil])
-        #expect(switcher.alternateIconName == nil)
-    }
-
-    /// The pick outlives the refund, so a restore needs nothing but
-    /// another reconcile.
-    @Test("A restore brings the pick back")
-    func restoreBringsPickBack() async throws {
-        let switcher = MockAppIconSwitcher()
-        let applier = AppIconApplier(switcher: switcher)
-        try await applier.apply(preferred: .sakura, isSupporter: false)
-        #expect(switcher.requests.isEmpty)
-
-        try await applier.apply(preferred: .sakura, isSupporter: true)
-        #expect(switcher.requests == ["AppIconSakura"])
     }
 
     /// A pick's alert makes the scene inactive; dismissing it makes it
@@ -162,8 +129,8 @@ struct AppIconTests {
         let switcher = MockAppIconSwitcher()
         let applier = AppIconApplier(switcher: switcher)
 
-        async let pick = applier.apply(preferred: .umi, isSupporter: true)
-        async let reconcile = applier.apply(preferred: .umi, isSupporter: true)
+        async let pick = applier.apply(preferred: .umi)
+        async let reconcile = applier.apply(preferred: .umi)
         let results = try await [pick, reconcile]
 
         #expect(switcher.requests == ["AppIconUmi"])
@@ -175,8 +142,8 @@ struct AppIconTests {
         let switcher = MockAppIconSwitcher()
         let applier = AppIconApplier(switcher: switcher)
 
-        async let first = applier.apply(preferred: .umi, isSupporter: true)
-        async let second = applier.apply(preferred: .fuji, isSupporter: true)
+        async let first = applier.apply(preferred: .umi)
+        async let second = applier.apply(preferred: .fuji)
         _ = try await [first, second]
 
         #expect(switcher.requests.count == 2)
@@ -187,7 +154,7 @@ struct AppIconTests {
     @Test("A device that can't change icons is never asked")
     func unsupportedIsNeverAsked() async throws {
         let switcher = MockAppIconSwitcher(supportsAlternateIcons: false)
-        #expect(try await !AppIconApplier(switcher: switcher).apply(preferred: .ura, isSupporter: true))
+        #expect(try await !AppIconApplier(switcher: switcher).apply(preferred: .ura))
         #expect(switcher.requests.isEmpty)
     }
 
@@ -197,7 +164,7 @@ struct AppIconTests {
         let switcher = MockAppIconSwitcher()
         switcher.failure = Refused()
         await #expect(throws: Refused.self) {
-            try await AppIconApplier(switcher: switcher).apply(preferred: .hotaru, isSupporter: true)
+            try await AppIconApplier(switcher: switcher).apply(preferred: .hotaru)
         }
         #expect(switcher.alternateIconName == nil)
     }

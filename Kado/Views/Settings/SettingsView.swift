@@ -20,7 +20,6 @@ struct SettingsView: View {
                 ArchivedSection()
                 BackupSection()
                 SupportSection()
-                TipJarSection()
                 DevModeSection()
                 wordmarkFooter
             }
@@ -40,7 +39,7 @@ struct SettingsView: View {
         Section {
             EmptyView()
         } footer: {
-            Text(verbatim: "稼 働 · in operation")
+            Text("Kadō — in operation")
                 .font(.system(size: 13, design: .serif))
                 .tracking(2.0)
                 .foregroundStyle(Color.kadoForegroundTertiary)

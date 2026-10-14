@@ -14,24 +14,20 @@ import Foundation
 /// brand is the same under every theme.
 ///
 /// Raw values are stored in `UserDefaults` (`HabitThemeDefaults`), so
-/// they stay stable strings. What is stored is the user's *pick*;
-/// what renders is `HabitTheme.effective(preferred:isSupporter:)`,
-/// since every theme after Classic needs the Supporter pack.
+/// they stay stable strings. Every selected palette is available.
 nonisolated public enum HabitTheme: String, CaseIterable, Codable, Sendable, Hashable {
     /// The OKLCH palette at matched lightness and chroma (#89). The
     /// default.
     case kado
     /// Apple's system hues, as habits wore them before #89.
     case classic
-    /// Kadō's lightness at half its chroma: ink wash. Supporter pack.
+    /// Soft colours at half the default chroma.
     case muted
-    /// As much chroma as sRGB shows at each hue. Supporter pack.
+    /// Bright, saturated system colours.
     case vivid
-    /// Four oranges and four greens, told apart by lightness and
-    /// chroma. Supporter pack.
+    /// Four oranges and four greens, with different lightness and chroma.
     case autumn
     /// One hue, the brand sage, told apart by lightness alone.
-    /// Supporter pack.
     case monochromeSage
 
     /// The slot's light-mode base.
@@ -70,7 +66,7 @@ nonisolated public enum HabitTheme: String, CaseIterable, Codable, Sendable, Has
 
     /// Whether the slots are spread around the hue wheel, each told
     /// apart from the next by hue. Two themes aren't, by design:
-    /// Monochrome sage shares one hue, and Autumn packs its eight into
+
     /// an orange and a green family, so neighbours within a family sit
     /// closer than 15° and differ by lightness and chroma instead. The
     /// palette tests hold every theme to the same minimum Oklab
@@ -257,20 +253,4 @@ nonisolated public enum HabitTheme: String, CaseIterable, Codable, Sendable, Has
         let lightness = (darkMode ? 0.48 : 0.36) + index * 0.06
         return OKLCH(l: lightness, c: 0.065, h: 158)
     }
-}
-
-// MARK: - Supporter pack
-
-/// Kadō and Classic are free; every other theme needs the Supporter
-/// pack. Without it a paid pick renders as Kadō — the stored choice is
-/// kept, so it comes back the moment the pack does.
-extension HabitTheme: SupporterGated {
-    public var requiresSupporterPack: Bool {
-        switch self {
-        case .kado, .classic: false
-        case .muted, .vivid, .autumn, .monochromeSage: true
-        }
-    }
-
-    public static let freeFallback = HabitTheme.kado
 }

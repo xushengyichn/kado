@@ -16,6 +16,12 @@
             "state" : "translated",
             "value" : "%lld"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
         }
       }
     },
@@ -33,6 +39,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$lld / %2$lld faites"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已完成 %lld / %lld"
           }
         }
       }
@@ -52,6 +64,12 @@
             "state" : "translated",
             "value" : "%1$lld sur %2$lld faites aujourd'hui"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天已完成 %lld / %lld"
+          }
         }
       }
     },
@@ -69,6 +87,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$lld habitudes sur %2$lld faites aujourd'hui"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天已完成 %lld / %lld 个习惯"
           }
         }
       }
@@ -88,6 +112,12 @@
             "state" : "translated",
             "value" : "%lld %%"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%%"
+          }
         }
       }
     },
@@ -105,6 +135,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lldj"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 天"
           }
         }
       }
@@ -124,6 +160,12 @@
             "state" : "translated",
             "value" : "Tout est fait"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部完成"
+          }
         }
       }
     },
@@ -141,6 +183,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Choisir des habitudes"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择习惯"
           }
         }
       }
@@ -160,6 +208,12 @@
             "state" : "translated",
             "value" : "Choisis les habitudes affichées par ce widget. Laisse vide pour toutes les afficher."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择小组件显示的习惯。留空则显示全部。"
+          }
         }
       }
     },
@@ -177,23 +231,11 @@
             "state" : "translated",
             "value" : "Progression du jour"
           }
-        }
-      }
-    },
-    "done" : {
-      "comment" : "Widget accessibility: binary habit completed",
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "done"
-          }
         },
-        "fr" : {
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "fait"
+            "value" : "每日进度"
           }
         }
       }
@@ -212,6 +254,12 @@
             "state" : "translated",
             "value" : "Habitude"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "习惯"
+          }
         }
       }
     },
@@ -228,6 +276,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Progression de l'habitude"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "习惯进度"
           }
         }
       }
@@ -247,6 +301,12 @@
             "state" : "translated",
             "value" : "Habitudes"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "习惯"
+          }
         }
       }
     },
@@ -264,6 +324,12 @@
             "state" : "translated",
             "value" : "Habitudes prévues aujourd'hui avec un résumé de progression. Choisis-en jusqu'à 8."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示今天计划内的习惯和完成概况。最多选择 8 个。"
+          }
         }
       }
     },
@@ -280,6 +346,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Combien d'habitudes du jour sont faites, en anneau."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用圆环显示今天已完成的习惯数量。"
           }
         }
       }
@@ -299,6 +371,12 @@
             "state" : "translated",
             "value" : "Aucune habitude prévue aujourd'hui"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天没有计划内的习惯"
+          }
         }
       }
     },
@@ -316,6 +394,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aucune habitude pour l'instant"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "还没有习惯"
           }
         }
       }
@@ -335,23 +419,11 @@
             "state" : "translated",
             "value" : "Aucune habitude choisie à afficher"
           }
-        }
-      }
-    },
-    "not done" : {
-      "comment" : "Widget accessibility: binary habit not completed",
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "not done"
-          }
         },
-        "fr" : {
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "non fait"
+            "value" : "没有可显示的已选习惯"
           }
         }
       }
@@ -371,6 +443,12 @@
             "state" : "translated",
             "value" : "Pas aujourd'hui"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天不必完成"
+          }
         }
       }
     },
@@ -388,23 +466,11 @@
             "state" : "translated",
             "value" : "Résumé en une ligne des habitudes du jour."
           }
-        }
-      }
-    },
-    "Pick a habit" : {
-      "comment" : "Accessibility label for an unpicked circular lock widget.",
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pick a habit"
-          }
         },
-        "fr" : {
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choisir une habitude"
+            "value" : "用一行文字概括今天的习惯。"
           }
         }
       }
@@ -424,6 +490,36 @@
             "state" : "translated",
             "value" : "Choisir une habitude"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择习惯"
+          }
+        }
+      }
+    },
+    "Pick a habit" : {
+      "comment" : "Accessibility label for an unpicked circular lock widget.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick a habit"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir une habitude"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择一个习惯"
+          }
         }
       }
     },
@@ -442,6 +538,12 @@
             "state" : "translated",
             "value" : "Choisis l'habitude affichée par ce widget."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择此小组件显示的习惯。"
+          }
         }
       }
     },
@@ -458,6 +560,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Valide rapidement les habitudes du jour d'un tap. Choisis-en jusqu'à 5."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "轻点即可完成今天计划内的习惯。最多选择 5 个。"
           }
         }
       }
@@ -477,6 +585,12 @@
             "state" : "translated",
             "value" : "Score %lld pour cent"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "习惯强度 %lld%%"
+          }
         }
       }
     },
@@ -493,6 +607,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Affiche une habitude sur l'écran verrouillé."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在锁定屏幕上显示一个习惯。"
           }
         }
       }
@@ -512,6 +632,12 @@
             "state" : "translated",
             "value" : "Série %1$lld, score %2$lld pour cent"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连续达标 %lld，习惯强度 %lld%%"
+          }
         }
       }
     },
@@ -529,6 +655,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Touche pour choisir une habitude"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "轻点选择习惯"
+          }
+        }
+      }
+    },
+    "This Week" : {
+      "comment" : "Large home widget display name.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Week"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette semaine"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本周"
           }
         }
       }
@@ -548,22 +703,11 @@
             "state" : "translated",
             "value" : "Cette semaine"
           }
-        }
-      }
-    },
-    "This Week" : {
-      "comment" : "Large home widget display name.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This Week"
-          }
         },
-        "fr" : {
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cette semaine"
+            "value" : "本周"
           }
         }
       }
@@ -582,22 +726,11 @@
             "state" : "translated",
             "value" : "Aujourd'hui"
           }
-        }
-      }
-    },
-    "Today · Progress" : {
-      "comment" : "Medium home widget display name.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Today · Progress"
-          }
         },
-        "fr" : {
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aujourd'hui · Progression"
+            "value" : "今天"
           }
         }
       }
@@ -616,6 +749,35 @@
             "state" : "translated",
             "value" : "Résumé du jour"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日概况"
+          }
+        }
+      }
+    },
+    "Today · Progress" : {
+      "comment" : "Medium home widget display name.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today · Progress"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd'hui · Progression"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天 · 进度"
+          }
         }
       }
     },
@@ -633,6 +795,12 @@
             "state" : "translated",
             "value" : "Progression d'une habitude du jour en anneau."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用圆环显示一个习惯今天的进度。"
+          }
         }
       }
     },
@@ -649,6 +817,60 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ta grille d'habitudes sur les sept derniers jours. Choisis-en jusqu'à 5."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示过去七天的习惯记录。最多选择 5 个。"
+          }
+        }
+      }
+    },
+    "done" : {
+      "comment" : "Widget accessibility: binary habit completed",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "done"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "fait"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已完成"
+          }
+        }
+      }
+    },
+    "not done" : {
+      "comment" : "Widget accessibility: binary habit not completed",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "not done"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "non fait"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未完成"
           }
         }
       }

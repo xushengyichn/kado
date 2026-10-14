@@ -60,7 +60,7 @@ final class HabitThemePickerTests: KadoUITestCase {
     /// the destination sits on `AppearanceView`'s `Form`, and a
     /// `navigationDestination` in the wrong place is silently ignored.
     @MainActor
-    func testTappingALockedThemeOpensTheSupporterPack() {
+    func testEveryThemeCanBeSelectedWithoutAPurchase() {
         let app = launchApp()
         openAppearance(in: app)
         let vivid = themeRow("vivid", in: app)
@@ -69,12 +69,9 @@ final class HabitThemePickerTests: KadoUITestCase {
         capture(app, "habit-theme-picker-locked")
 
         vivid.tap()
-        let restore = app.buttons[AccessibilityID.SupporterPack.restoreButton]
-        XCTAssertTrue(
-            restore.waitForExistence(timeout: 10),
-            "A locked theme should open the Supporter pack."
-        )
-        capture(app, "habit-theme-locked-opens-pack")
+        let selected = expectation(for: NSPredicate(format: "isSelected == true"), evaluatedWith: vivid)
+        wait(for: [selected], timeout: 5)
+        capture(app, "habit-theme-vivid-free")
     }
 }
 
@@ -91,8 +88,7 @@ final class HabitPaletteCaptureTests: KadoUITestCase {
     func testCaptureEveryPaidPalette() {
         for theme in paidThemes {
             let app = launchApp(
-                seedProduction: true, seedForScreenshots: true,
-                supporter: true, habitTheme: theme
+                seedProduction: true, seedForScreenshots: true, habitTheme: theme
             )
             waitForTodayRows(in: app)
             capture(app, "palette-\(theme)-today")
@@ -102,8 +98,7 @@ final class HabitPaletteCaptureTests: KadoUITestCase {
             app.terminate()
 
             let gallery = launchApp(
-                seedProduction: true, seedForScreenshots: true, widgetGallery: true,
-                supporter: true, habitTheme: theme
+                seedProduction: true, seedForScreenshots: true, widgetGallery: true, habitTheme: theme
             )
             let medium = gallery.otherElements[AccessibilityID.Screenshot.widgetMedium]
             XCTAssertTrue(medium.waitForExistence(timeout: 30), "No widget gallery for \(theme).")

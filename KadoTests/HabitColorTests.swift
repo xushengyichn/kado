@@ -54,20 +54,7 @@ struct HabitColorTests {
     }
 
     /// Kadō and Classic are the free themes; everything else is the
-    /// Supporter pack's, and falls back to Kadō without it.
-    @Test("Only Kadō and Classic are free, and a locked theme renders as Kadō")
-    func themeGating() {
-        let free: Set<HabitTheme> = [.kado, .classic]
-        #expect(HabitTheme.freeFallback == .kado)
-        for theme in HabitTheme.allCases {
-            #expect(theme.requiresSupporterPack == !free.contains(theme), "\(theme)")
-            #expect(HabitTheme.effective(preferred: theme, isSupporter: true) == theme)
-            #expect(
-                HabitTheme.effective(preferred: theme, isSupporter: false) == (free.contains(theme) ? theme : .kado),
-                "\(theme)"
-            )
-        }
-    }
+
 
     // MARK: - Kadō's look
 

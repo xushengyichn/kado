@@ -68,7 +68,6 @@ private struct DayStartPicker: View {
 /// destination SwiftUI generates for that style renders in the system
 /// list style — white rows in light, black in dark — with no seam to
 /// give it the paper background every other pushed screen has (see
-/// `TipJarView`). Selecting a row writes the hour and pops, the way
 /// the system picker does.
 private struct DayStartHourList: View {
     @Binding var hour: Int

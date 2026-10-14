@@ -6,7 +6,6 @@ import Foundation
 /// the app reads it, since only the app can change its icon. The system
 /// keeps its own record of the icon it shows
 /// (`UIApplication.alternateIconName`); this one is the user's *pick*,
-/// which outlives a lapsed Supporter pack so a restore can put it back.
 nonisolated public enum AppIconDefaults {
     public static let key = "kado.appIcon"
 

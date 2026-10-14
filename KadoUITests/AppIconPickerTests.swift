@@ -53,7 +53,7 @@ final class AppIconPickerTests: KadoUITestCase {
 
     @MainActor
     func testPickingAnIconChangesTheHomeScreen() {
-        let app = launchApp(supporter: true)
+        let app = launchApp()
         openAppearance(in: app)
         let umi = iconRow("umi", in: app)
         scrollTo(umi, in: app)
@@ -82,7 +82,7 @@ final class AppIconPickerTests: KadoUITestCase {
     /// picked — through the destination `AppearanceView` already holds
     /// for the habit colour themes.
     @MainActor
-    func testTappingALockedIconOpensTheSupporterPack() {
+    func testAlternateIconsCanBeSelectedWithoutAPurchase() {
         let app = launchApp()
         openAppearance(in: app)
         let fuji = iconRow("fuji", in: app)
@@ -90,11 +90,8 @@ final class AppIconPickerTests: KadoUITestCase {
         scrollClearOfTabBar(fuji, in: app)
         capture(app, "app-icon-picker-locked")
 
-        fuji.tap()
-        let restore = app.buttons[AccessibilityID.SupporterPack.restoreButton]
-        XCTAssertTrue(
-            restore.waitForExistence(timeout: 10),
-            "A locked icon should open the Supporter pack."
-        )
+        pick("fuji", in: app)
+        capture(app, "app-icon-fuji-free")
+        pick("kado", in: app)
     }
 }

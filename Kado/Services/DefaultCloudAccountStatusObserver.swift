@@ -22,14 +22,15 @@ protocol CKAccountStatusProviding: Sendable {
 /// init would inherit MainActor and the default-argument site in
 /// `DefaultCloudAccountStatusObserver.init` would emit a warning.
 nonisolated final class DefaultCKAccountStatusProvider: CKAccountStatusProviding {
-    private let container: CKContainer
+    private let container: CKContainer?
 
     init(containerID: String = CloudContainerID.kado) {
-        self.container = CKContainer(identifier: containerID)
+        self.container = SharedStore.offlineOnly ? nil : CKContainer(identifier: containerID)
     }
 
     func accountStatus() async throws -> CKAccountStatus {
-        try await container.accountStatus()
+        guard let container else { return .noAccount }
+        return try await container.accountStatus()
     }
 }
 

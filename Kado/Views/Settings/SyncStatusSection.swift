@@ -14,7 +14,13 @@ struct SyncStatusSection: View {
 
     var body: some View {
         Section {
-            if isDevMode {
+            if SharedStore.offlineOnly {
+                Label("Stored on this iPhone", systemImage: "iphone")
+                Text("Your habits are saved locally. No account or payment is needed. Export a backup to keep a copy.")
+                    .font(.footnote)
+                    .foregroundStyle(Color.kadoForegroundSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else if isDevMode {
                 devModePausedRow
             } else if observer.status == .available && observer.syncHealth == .failing {
                 syncFailingRow
@@ -31,8 +37,11 @@ struct SyncStatusSection: View {
                 }
             }
         } header: {
-            Text("iCloud")
-                .foregroundStyle(Color.kadoForegroundSecondary)
+            if SharedStore.offlineOnly {
+                Text("Local storage").foregroundStyle(Color.kadoForegroundSecondary)
+            } else {
+                Text("iCloud").foregroundStyle(Color.kadoForegroundSecondary)
+            }
         }
         .listRowBackground(Color.kadoBackgroundSecondary)
     }

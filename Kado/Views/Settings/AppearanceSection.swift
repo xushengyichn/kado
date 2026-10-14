@@ -6,7 +6,6 @@ import KadoCore
 struct AppearanceSection: View {
     @AppStorage(HabitThemeDefaults.key, store: HabitThemeDefaults.sharedDefaults)
     private var theme: HabitTheme = HabitThemeDefaults.defaultValue
-    @Environment(\.supporterPack) private var store
 
     var body: some View {
         Section {
@@ -14,7 +13,7 @@ struct AppearanceSection: View {
                 AppearanceView()
             } label: {
                 Label("Appearance", systemImage: "paintpalette")
-                    .badge(Text(HabitTheme.effective(preferred: theme, isSupporter: store.isSupporter).name))
+                    .badge(Text(theme.name))
             }
             .accessibilityIdentifier(AccessibilityID.Settings.appearanceRow)
             .listRowBackground(Color.kadoBackgroundSecondary)

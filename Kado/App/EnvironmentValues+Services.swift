@@ -88,30 +88,11 @@ extension EnvironmentValues {
 
     @Entry var reviewPromptService: any ReviewPrompting = DefaultReviewPromptService()
 
-    /// Gates the tip nudge at the bottom of Today — how long the app
-    /// has been in use, whether the user dismissed it, whether they
-    /// already tipped. The default reads the real `UserDefaults`;
-    /// previews and tests inject a stub to pin the answer.
-    @Entry var tipNudge: any TipNudging = DefaultTipNudgeService()
-
     /// Gates the Appearance announcement, which shares the tip nudge's
     /// slot at the bottom of Today (`TodayCard`). Retired by Today's
     /// card and by `AppearanceView` itself, whichever comes first.
     @Entry var appearanceAnnouncement: any AppearanceAnnouncing =
         DefaultAppearanceAnnouncementService()
-
-    /// Loads the tip products and runs purchases for the Tip Jar. Default
-    /// is a mock so previews and unit tests never touch StoreKit; the
-    /// main app injects `DefaultTipJarStore(tipNudge:)` at scene build.
-    @Entry var tipJarStore: any TipJarStoring = MockTipJarStore()
-
-    /// Whether this device owns the Supporter pack, and its purchase and
-    /// restore. Gate cosmetic extras on its `isSupporter` through
-    /// `SupporterGated.effective(preferred:isSupporter:)`. Default is a
-    /// mock (not a supporter) so previews and unit tests never touch
-    /// StoreKit; the main app injects `DefaultSupporterPackStore()` at
-    /// scene build.
-    @Entry var supporterPack: any SupporterPackStoring = MockSupporterPackStore()
 
     /// Changes the Home Screen icon, one switch at a time. Default wraps
     /// a mock so previews never raise the system's icon-changed alert;

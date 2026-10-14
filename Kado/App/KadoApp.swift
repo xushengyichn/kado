@@ -19,8 +19,6 @@ struct KadoApp: App {
     @State private var cloudAccountStatus: any CloudAccountStatusObserving = Self.makeCloudAccountStatus()
     @State private var notificationScheduler: any NotificationScheduling
     @State private var notificationManager: NotificationManager
-    @State private var tipJarStore = DefaultTipJarStore(tipNudge: DefaultTipNudgeService())
-    @State private var supporterPack: any SupporterPackStoring = Self.makeSupporterPack()
     @State private var appIconApplier = AppIconApplier(switcher: LiveAppIconSwitcher())
 
     /// Raw wall-clock marker, bumped whenever the logical day may have
@@ -66,25 +64,18 @@ struct KadoApp: App {
         #endif
     }
 
-    /// The theme habits actually paint in: the stored pick, unless it
-    /// needs a Supporter pack this device doesn't own. Read from the
-    /// live store, so a purchase, restore or refund repaints at once.
+    /// Use the selected palette directly.
     private var renderedHabitTheme: HabitTheme {
-        HabitTheme.effective(preferred: habitTheme, isSupporter: supporterPack.isSupporter)
+        habitTheme
     }
 
-    /// Puts the Home Screen icon back in line with the pick and the
-    /// pack: the default when a refund lapsed it, the pick again after a
-    /// restore. A no-op — and no system alert — when they already agree.
-    /// A failure is logged, not shown: the user didn't ask for this
-    /// switch, and the next foreground tries again.
+    /// Apply the stored icon when the app returns to the foreground.
     private func reconcileAppIcon() {
         let applier = appIconApplier
         let preferred = appIcon
-        let isSupporter = supporterPack.isSupporter
         Task { @MainActor in
             do {
-                try await applier.apply(preferred: preferred, isSupporter: isSupporter)
+                try await applier.apply(preferred: preferred)
             } catch {
                 Logger(subsystem: "dev.scastiel.kado", category: "app-icon")
                     .error("Couldn't reconcile the app icon: \(error.localizedDescription, privacy: .public)")
@@ -102,17 +93,6 @@ struct KadoApp: App {
         }
         #endif
         return DefaultCloudAccountStatusObserver()
-    }
-
-    /// StoreKit's store — or, on a UI test run that asked to own the
-    /// pack, a mock that does, since a test run can't buy it.
-    private static func makeSupporterPack() -> any SupporterPackStoring {
-        #if DEBUG
-        if UITestSupport.forcesSupporter {
-            return MockSupporterPackStore(isSupporter: true)
-        }
-        #endif
-        return DefaultSupporterPackStore()
     }
 
     init() {
@@ -149,10 +129,6 @@ struct KadoApp: App {
         return WindowGroup {
             rootView
                 .task { await cloudAccountStatus.refresh() }
-                // A refund granted while the app was closed arrives as a
-                // missing entitlement, not an update — this is where the
-                // app (and, through the mirror, the widget) falls back.
-                .task { await supporterPack.refreshEntitlement() }
                 .task {
                     // Seed the widget's App Group JSON snapshot at
                     // launch so widgets have fresh data even if the
@@ -184,8 +160,6 @@ struct KadoApp: App {
         .modelContainer(container)
         .environment(\.cloudAccountStatus, cloudAccountStatus)
         .environment(\.notificationScheduler, notificationScheduler)
-        .environment(\.tipJarStore, tipJarStore)
-        .environment(\.supporterPack, supporterPack)
         .environment(\.appIconApplier, appIconApplier)
         .environment(\.calendar, weekCalendar)
         // The one calculator that reads `firstWeekday`: a
@@ -239,10 +213,7 @@ struct KadoApp: App {
             // screen keeps the old hues until the next habit mutation.
             WidgetReloader.reloadAll(using: container.mainContext)
         }
-        .onChange(of: supporterPack.isSupporter) { _, _ in
-            // A purchase, restore or refund while the app is open.
-            reconcileAppIcon()
-        }
+
         .onChange(of: isDevMode) { oldValue, newValue in
             if newValue && !oldValue {
                 devModeController.activateDevMode()

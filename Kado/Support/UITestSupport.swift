@@ -64,11 +64,10 @@ nonisolated enum UITestSupport {
         /// listing image, where it covers the frequency and type
         /// options the shot exists to show.
         static let suppressNameAutoFocus = "-uiTestSuppressNameAutoFocus"
-        /// Backdate the tip nudge's first-launch marker so the app
+
         /// starts old enough to show it. Without this the nudge is a
         /// week away from any fresh launch, which no test and no visual
         /// check can wait for.
-        static let tipNudgeReady = "-uiTestTipNudgeReady"
         /// Leave the Appearance announcement due. Every other run starts
         /// with it already put away, or it would sit under Today's
         /// habits in every capture and every test — the App Store
@@ -91,12 +90,9 @@ nonisolated enum UITestSupport {
         /// `ArchivedHabitsTests` drives that path once, end to end,
         /// and starts here for the rest.
         static let archiveFirstHabit = "-uiTestArchiveFirstHabit"
-        /// Own the Supporter pack for the run: `KadoApp` injects an
-        /// owning `MockSupporterPackStore` in place of StoreKit, which
-        /// a test run can't buy from. Without it every paid habit
+
         /// theme renders as Kadō, which is right for a user and useless
         /// for photographing one.
-        static let supporter = "-uiTestSupporter"
         /// Start in a habit colour theme. Followed by its raw value.
         /// Written into the suite from inside the app, like everything
         /// here a user can change later — see the note at the top of
@@ -111,10 +107,7 @@ nonisolated enum UITestSupport {
     }
 
     /// Whether `KadoApp` should stand in an owning mock for StoreKit.
-    static var forcesSupporter: Bool {
-        isRunningUITests
-            && ProcessInfo.processInfo.arguments.contains(Argument.supporter)
-    }
+
 
     /// Whether `KadoApp` should stand in a signed-in, syncing iCloud
     /// account for the real observer.
@@ -184,15 +177,12 @@ nonisolated enum UITestSupport {
         // and raise the system's alert over whatever that run tests.
         UserDefaults.standard.removeObject(forKey: AppIconDefaults.key)
         // And the pack's App Group mirror, which the store seeds from
-        // and the widget reads: a run under `-uiTestSupporter` must not
         // leave the next one owning it.
-        SupporterDefaults.sharedDefaults.removeObject(forKey: SupporterDefaults.key)
-        applyTipNudgeState(arguments)
         applyAppearanceAnnouncementState(arguments)
     }
 
     /// Puts the Appearance announcement into a known state: retired,
-    /// long ago (so the tip nudge's next-day wait never applies), unless
+
     /// the run asks for it. Cleared first, because retiring is terminal.
     private static func applyAppearanceAnnouncementState(_ arguments: [String]) {
         for key in AppearanceAnnouncementDefaults.allKeys {
@@ -204,7 +194,6 @@ nonisolated enum UITestSupport {
         )
     }
 
-    /// Puts the tip nudge into a known state for the run.
     ///
     /// Cleared unconditionally for the same reason the dev-mode flag is
     /// written unconditionally: the nudge's "hidden" and "tipped" flags
@@ -213,16 +202,7 @@ nonisolated enum UITestSupport {
     /// than passed as a launch argument, because the argument domain
     /// outranks stored values and would freeze it against the app's own
     /// writes — see the note at the top of this file.
-    private static func applyTipNudgeState(_ arguments: [String]) {
-        for key in TipNudgeDefaults.allKeys {
-            UserDefaults.standard.removeObject(forKey: key)
-        }
-        guard arguments.contains(Argument.tipNudgeReady) else { return }
-        UserDefaults.standard.set(
-            Date.now.addingTimeInterval(-30 * 86_400),
-            forKey: TipNudgeDefaults.firstLaunchDate
-        )
-    }
+
 
     private static func flag(_ argument: String, in arguments: [String]) -> Bool {
         guard let index = arguments.firstIndex(of: argument),

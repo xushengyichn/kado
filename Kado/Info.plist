@@ -11,5 +11,7 @@
 			<string>Kado</string>
 		</dict>
 	</array>
+	<key>KadoOfflineOnly</key>
+	<string>$(KADO_OFFLINE_ONLY)</string>
 </dict>
 </plist>

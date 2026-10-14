@@ -1,10 +1,31 @@
 import Foundation
+import SwiftData
 import Testing
 @testable import Kado
 import KadoCore
 
 @Suite("SharedStore")
 struct SharedStoreTests {
+    @MainActor
+    @Test("Personal builds reopen saved habits without a CloudKit account")
+    func offlineProductionStorePersists() throws {
+        guard SharedStore.offlineOnly else { return }
+        let sandbox = try makeSandbox()
+        defer { try? FileManager.default.removeItem(at: sandbox) }
+        let store = sandbox.appendingPathComponent("personal.sqlite")
+        let name = "Offline swim-\(UUID().uuidString)"
+
+        do {
+            let container = try SharedStore.productionContainer(storeURL: store)
+            container.mainContext.insert(HabitRecord(name: name))
+            try container.mainContext.save()
+        }
+
+        let reopened = try SharedStore.productionContainer(storeURL: store)
+        let habits = try reopened.mainContext.fetch(FetchDescriptor<HabitRecord>())
+        #expect(habits.map(\.name) == [name])
+    }
+
     private func makeSandbox() throws -> URL {
         let root = URL(fileURLWithPath: NSTemporaryDirectory())
             .appendingPathComponent("SharedStoreTests-\(UUID().uuidString)", isDirectory: true)
