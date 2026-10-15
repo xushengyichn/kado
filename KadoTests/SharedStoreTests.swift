@@ -127,6 +127,31 @@ struct SharedStoreTests {
 
     @Test("App Group identifier matches the entitlement convention")
     func appGroupIdentifierIsStable() {
-        #expect(SharedStore.appGroupID == "group.dev.scastiel.kado")
+        let expected = SharedStore.offlineOnly
+            ? "group.com.shengyixu.kado.personal"
+            : "group.dev.scastiel.kado"
+        #expect(SharedStore.appGroupID == expected)
+    }
+
+    @Test("Personal settings migrate without replacing newer shared values")
+    func personalDefaultsMigration() throws {
+        let sourceName = "kado-migration-source-\(UUID().uuidString)"
+        let destinationName = "kado-migration-destination-\(UUID().uuidString)"
+        let source = try #require(UserDefaults(suiteName: sourceName))
+        let destination = try #require(UserDefaults(suiteName: destinationName))
+        defer {
+            source.removePersistentDomain(forName: sourceName)
+            destination.removePersistentDomain(forName: destinationName)
+        }
+        source.set(6, forKey: DayStartDefaults.key)
+        source.set(WeekStart.monday.rawValue, forKey: WeekStartDefaults.key)
+        source.set(HabitTheme.vivid.rawValue, forKey: HabitThemeDefaults.key)
+        destination.set(8, forKey: DayStartDefaults.key)
+
+        SharedStore.migrateDefaults(from: [source], to: destination)
+
+        #expect(destination.integer(forKey: DayStartDefaults.key) == 8)
+        #expect(destination.integer(forKey: WeekStartDefaults.key) == WeekStart.monday.rawValue)
+        #expect(destination.string(forKey: HabitThemeDefaults.key) == HabitTheme.vivid.rawValue)
     }
 }

@@ -1,6 +1,7 @@
 import Foundation
 import Testing
 @testable import Kado
+import KadoCore
 
 /// Pins the plain-ASCII names Siri can match the app by (issue #108).
 ///
@@ -17,28 +18,24 @@ struct AppSpokenNameTests {
 
     private var info: [String: Any] { Bundle.main.infoDictionary ?? [:] }
 
-    private var foldedDisplayName: String? {
-        (info["CFBundleDisplayName"] as? String)?
-            .folding(options: .diacriticInsensitive, locale: Locale(identifier: "en"))
-    }
-
-    @Test("The display name still carries the macron")
+    @Test("The personal edition has a distinct display name")
     func displayNameIsKado() {
-        #expect(info["CFBundleDisplayName"] as? String == "Kadō")
+        #expect(info["CFBundleDisplayName"] as? String ==
+            (SharedStore.offlineOnly ? "Kadō 离线版" : "Kadō"))
     }
 
-    @Test("The spoken name is the display name without diacritics")
+    @Test("The spoken name stays easy for Siri to recognize")
     func spokenNameIsFolded() throws {
         let spoken = try #require(info["CFBundleSpokenName"] as? String)
-        #expect(spoken == foldedDisplayName)
+        #expect(spoken == "Kado")
         #expect(spoken.allSatisfy { $0.isASCII })
     }
 
-    @Test("An alternative app name is the display name without diacritics")
+    @Test("Kado remains an alternative app name")
     func alternativeNameIsFolded() throws {
         let entries = try #require(info["INAlternativeAppNames"] as? [[String: Any]])
         let names = entries.compactMap { $0["INAlternativeAppName"] as? String }
-        #expect(names.contains { $0 == foldedDisplayName })
+        #expect(names.contains("Kado"))
         #expect(names.allSatisfy { name in name.allSatisfy { $0.isASCII } })
     }
 }

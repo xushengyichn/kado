@@ -23,7 +23,39 @@ nonisolated public enum SharedStore {
 
     /// App Group identifier. Must match the entitlement string on
     /// both the main app and the widget extension targets.
-    public static let appGroupID = "group.dev.scastiel.kado"
+    public static var appGroupID: String {
+        if let configured = Bundle.main.object(forInfoDictionaryKey: "KadoAppGroupID") as? String,
+           configured.hasPrefix("group.") {
+            return configured
+        }
+        return "group.dev.scastiel.kado"
+    }
+
+    /// The first personal build had no App Group entitlement. Preserve its
+    /// device-local settings when the app starts using the shared suite.
+    public static func migratePersonalDefaultsIfNeeded() {
+        guard offlineOnly, appGroupID != "group.dev.scastiel.kado",
+              let destination = UserDefaults(suiteName: appGroupID) else { return }
+        let oldSuite = UserDefaults(suiteName: "group.dev.scastiel.kado")
+        migrateDefaults(from: [oldSuite, .standard].compactMap { $0 }, to: destination)
+    }
+
+    /// Copies only Kadō's shared preferences and never overwrites a
+    /// value already saved by the new build. Sources are in priority order.
+    public static func migrateDefaults(from sources: [UserDefaults], to destination: UserDefaults) {
+        let keys = [
+            DayStartDefaults.key,
+            WeekStartDefaults.key,
+            HabitThemeDefaults.key,
+            DevModeDefaults.key,
+            DevModeDefaults.hasConfirmedKey,
+        ]
+        for key in keys where destination.object(forKey: key) == nil {
+            if let value = sources.lazy.compactMap({ $0.object(forKey: key) }).first {
+                destination.set(value, forKey: key)
+            }
+        }
+    }
 
     /// App Group container root if the entitlement is active.
     public static func appGroupContainerURL() -> URL? {

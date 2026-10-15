@@ -13,5 +13,7 @@
 	</array>
 	<key>KadoOfflineOnly</key>
 	<string>$(KADO_OFFLINE_ONLY)</string>
+	<key>KadoAppGroupID</key>
+	<string>$(KADO_APP_GROUP_ID)</string>
 </dict>
 </plist>

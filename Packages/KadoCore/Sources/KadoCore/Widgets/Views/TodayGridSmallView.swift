@@ -19,10 +19,10 @@ public struct TodayGridSmallView: View {
 
     public var body: some View {
         if rows.isEmpty {
-            // "All done" only when the day really is clear. If other
-            // habits are due and none of them was picked, saying "all
-            // done" would be a lie about habits the user still owes.
-            TodayEmptyPlaceholder(isFilteredOut: entry.isFilteredOut(limit: WidgetHabitLimit.small))
+            TodayEmptyPlaceholder(
+                isFilteredOut: entry.isFilteredOut(limit: WidgetHabitLimit.small),
+                hasHabits: !entry.snapshot.habits.isEmpty
+            )
         } else {
             VStack(spacing: 4) {
                 ForEach(rows) { row in
@@ -35,25 +35,26 @@ public struct TodayGridSmallView: View {
 }
 
 /// What the small and medium widgets show when they have no row to
-/// draw. An empty state asserts *why* it is empty, so there are two:
-/// the day is clear, or the user's pick has nothing due.
+/// draw. Missing snapshot data must never be described as completed work.
 public struct TodayEmptyPlaceholder: View {
     /// `true` when the tile is empty because the user's pick matched
     /// nothing — not due today, archived, deleted — rather than
     /// because there is nothing left to do.
     let isFilteredOut: Bool
+    let hasHabits: Bool
 
     @Environment(\.widgetRenderingMode) private var renderingMode
     @Environment(\.habitTheme) private var habitTheme
 
-    public init(isFilteredOut: Bool = false) {
+    public init(isFilteredOut: Bool = false, hasHabits: Bool = false) {
         self.isFilteredOut = isFilteredOut
+        self.hasHabits = hasHabits
     }
 
     public var body: some View {
         let palette = WidgetPalette(renderingMode: renderingMode, theme: habitTheme)
         VStack(spacing: 6) {
-            Image(systemName: isFilteredOut ? "line.3.horizontal.decrease.circle" : "checkmark.circle")
+            Image(systemName: isFilteredOut ? "line.3.horizontal.decrease.circle" : "calendar")
                 .font(.title2)
                 .foregroundStyle(palette.foregroundSecondary)
             // Two `Text`s rather than a ternary inside one: a
@@ -62,8 +63,10 @@ public struct TodayEmptyPlaceholder: View {
             Group {
                 if isFilteredOut {
                     Text("No picked habits to show")
+                } else if hasHabits {
+                    Text("No habits due today")
                 } else {
-                    Text("All done")
+                    Text("No habits yet")
                 }
             }
             .font(.caption)

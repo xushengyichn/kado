@@ -32,7 +32,10 @@ public struct TodayProgressMediumView: View {
         VStack(alignment: .leading, spacing: 8) {
             header
             if rows.isEmpty {
-                TodayEmptyPlaceholder(isFilteredOut: isFilteredOut)
+                TodayEmptyPlaceholder(
+                    isFilteredOut: isFilteredOut,
+                    hasHabits: !entry.snapshot.habits.isEmpty
+                )
             } else {
                 cellGrid
             }

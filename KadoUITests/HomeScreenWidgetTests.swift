@@ -21,6 +21,7 @@ import XCTest
 final class HomeScreenWidgetTests: KadoUITestCase {
 
     private let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+    private let appName = "Kadō 离线版"
 
     /// Which page of Kadō's widget gallery each family sits on — the
     /// order `KadoWidgetsBundle` declares them in.
@@ -145,7 +146,7 @@ final class HomeScreenWidgetTests: KadoUITestCase {
         XCTAssertTrue(search.waitForExistence(timeout: 10), "The widget gallery has no search field.")
         search.tap()
         search.typeText("Kad")
-        tap(springboard.cells["Kadō"].firstMatch, "Kadō in the gallery’s results")
+        tap(springboard.cells[appName].firstMatch, "offline Kadō in the gallery’s results")
         sleep(1)
 
         for _ in 0..<family.rawValue {
@@ -168,7 +169,7 @@ final class HomeScreenWidgetTests: KadoUITestCase {
 
     /// Every Kadō widget on the Home Screen.
     private var kadoTiles: XCUIElementQuery {
-        springboard.icons.matching(NSPredicate(format: "label == 'Kadō' AND value == 'Widget'"))
+        springboard.icons.matching(NSPredicate(format: "label == %@ AND value == 'Widget'", appName))
     }
 
     /// The placed tile of `family`, scrolled onto the visible page.

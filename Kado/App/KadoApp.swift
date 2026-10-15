@@ -96,6 +96,7 @@ struct KadoApp: App {
     }
 
     init() {
+        SharedStore.migratePersonalDefaultsIfNeeded()
         #if DEBUG
         // Before anything opens a `ModelContainer`: a run that asked for
         // a clean slate needs the store files gone first.
